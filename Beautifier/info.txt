@@ -1,0 +1,5 @@
+Code Beautifier for C
+This assignment does :-
+1) highlights C keywords and directives (define, include, operators, constants and comments)
+2) adds line numbers to output 
+3) indent statemets and statement blocks
