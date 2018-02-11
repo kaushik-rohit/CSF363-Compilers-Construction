@@ -1,14 +1,19 @@
+LEX=flex
 CC=gcc
-COFLAGS=
-CWFLAGS=
-CIFLAGS=
-CMFLAGS=
-CFLAGS= $(CWFLAGS) $(COFLAGS) $(CIFLAGS) $(CMFLAGS)
-beautify:
-beautify.o symbol.o init.o
-$(CC) $(CFLAGS) -obeautify $<
-.c.o:
-$(CC) $(CFLAGS) -c $<
-beautify.c:
-beautify.l
-flex -beautify.c beautify.l
+INC_DIR = ../Beautifier
+CFLAGS=-c -Wall -I$(INC_DIR)
+
+beautify: beautify.o symbol_table.o
+			$(CC) -o $@  $(LDFLAGS) $^
+				
+beautify.o: beautify.c
+				$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $^
+
+symbol_table.o: symbol_table.c
+				$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $^
+				
+beautify.c: beautifier.l
+				$(LEX) $(LFLAGS) -o $@ $^
+				
+clean:
+		$(RM) *.o
