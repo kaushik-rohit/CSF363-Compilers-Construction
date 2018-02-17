@@ -1,0 +1,243 @@
+<html><pre>
+
+1   <font color='#00FF00'>/* gtd-plugin-todo-txt.c
+ *
+ * Copyright (C) 2016 Rohit Kaushik &lt;kaushikrohit325@gmail.com&gt;
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */</font>
+2   <font color='#FF00FF'><b>#define G_LOG_DOMAIN &quot;Todo Txt&quot;</b></font>
+3   <font color='#FF00FF'><b>#include &quot;gtd-plugin-todo-txt.h&quot;</b></font>
+4   <font color='#FF00FF'><b>#include &quot;gtd-provider-todo-txt.h&quot;</b></font>
+5   <font color='#FF00FF'><b>#include &lt;glib/gi18n.h&gt;</b></font>
+6   <font color='#FF00FF'><b>#include &lt;glib-object.h&gt;</b></font>
+7   <font color='#00FF00'>/**
+ * The #GtdPluginTodoTxt is a class that loads Todo.txt
+ * provider of GNOME To Do.
+ */</font>
+8   <font color='#0000FF'><b>struct </b></font><a name='_GtdPluginTodoTxt'><font color='#0000FF'>_GtdPluginTodoTxt </font></a>
+9   {
+10      <a name='PeasExtensionBase'><font color='#0000FF'>PeasExtensionBase </font></a><a name='parent'><font color='#0000FF'>parent</font></a>;
+11      <a name='GFile'><font color='#0000FF'>GFile </font></a><font color='#000000'><b>*</b></font><a name='source_file'><font color='#0000FF'>source_file</font></a>;
+12      <a name='GSettings'><font color='#0000FF'>GSettings </font></a><font color='#000000'><b>*</b></font><a name='settings'><font color='#0000FF'>settings</font></a>;
+13      <a name='GtkWidget'><font color='#0000FF'>GtkWidget </font></a><font color='#000000'><b>*</b></font><a name='preferences_box'><font color='#0000FF'>preferences_box</font></a>;
+14      <a href='#GtkWidget'><font color='#0000FF'>GtkWidget </font></a><font color='#000000'><b>*</b></font><a name='preferences'><font color='#0000FF'>preferences</font></a>;
+15      <font color='#00FF00'>/* Providers */</font>
+16      <a name='GList'><font color='#0000FF'>GList </font></a><font color='#000000'><b>*</b></font><a name='providers'><font color='#0000FF'>providers</font></a>;
+17      
+18  }
+19  ;
+20  <font color='#0000FF'><b>enum </b></font>
+21  {
+22      <a name='PROP_0'><font color='#0000FF'>PROP_0</font></a><font color='#000000'><b>,
+23      </b></font><a name='PROP_PREFERENCES_PANEL'><font color='#0000FF'>PROP_PREFERENCES_PANEL</font></a><font color='#000000'><b>,
+24      </b></font><a name='LAST_PROP'><font color='#0000FF'>LAST_PROP </font></a>
+25  }
+26  ;
+27  <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_activatable_iface_init'><font color='#0000FF'>gtd_activatable_iface_init </font></a>(<a name='GtdActivatableInterface'><font color='#0000FF'>GtdActivatableInterface </font></a><font color='#000000'><b>*</b></font><a name='iface'><font color='#0000FF'>iface</font></a>);
+28  <a name='G_DEFINE_DYNAMIC_TYPE_EXTENDED'><font color='#0000FF'>G_DEFINE_DYNAMIC_TYPE_EXTENDED </font></a>(<a name='GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt</font></a><font color='#000000'><b>, </b></font><a name='gtd_plugin_todo_txt'><font color='#0000FF'>gtd_plugin_todo_txt</font></a><font color='#000000'><b>, </b></font><a name='PEAS_TYPE_EXTENSION_BASE'><font color='#0000FF'>PEAS_TYPE_EXTENSION_BASE</font></a><font color='#000000'><b>, </b></font><font color='#00ffff'><i>0</i></font><font color='#000000'><b>, </b></font><a name='G_IMPLEMENT_INTERFACE_DYNAMIC'><font color='#0000FF'>G_IMPLEMENT_INTERFACE_DYNAMIC </font></a>(<a name='GTD_TYPE_ACTIVATABLE'><font color='#0000FF'>GTD_TYPE_ACTIVATABLE</font></a><font color='#000000'><b>, </b></font><a href='#gtd_activatable_iface_init'><font color='#0000FF'>gtd_activatable_iface_init</font></a>))<font color='#00FF00'>/*
+ * GtdActivatable interface implementation
+ */</font>
+29  <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_activate'><font color='#0000FF'>gtd_plugin_todo_txt_activate </font></a>(<a name='GtdActivatable'><font color='#0000FF'>GtdActivatable </font></a><font color='#000000'><b>*</b></font><a name='activatable'><font color='#0000FF'>activatable</font></a>)
+30  {
+31      ;
+32      
+33  }
+34  <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_deactivate'><font color='#0000FF'>gtd_plugin_todo_txt_deactivate </font></a>(<a href='#GtdActivatable'><font color='#0000FF'>GtdActivatable </font></a><font color='#000000'><b>*</b></font><a name='activatable'><font color='#0000FF'>activatable</font></a>)
+35  {
+36      ;
+37      
+38  }
+39  <font color='#0000FF'><b>static </b></font><a href='#GList'><font color='#0000FF'>GList</font></a><font color='#000000'><b>*</b></font><a name='gtd_plugin_todo_txt_get_header_widgets'><font color='#0000FF'>gtd_plugin_todo_txt_get_header_widgets </font></a>(<a href='#GtdActivatable'><font color='#0000FF'>GtdActivatable </font></a><font color='#000000'><b>*</b></font><a name='activatable'><font color='#0000FF'>activatable</font></a>)
+40  {
+41      <font color='#0000FF'><b>return </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>;
+42      
+43  }
+44  <font color='#0000FF'><b>static </b></font><a href='#GtkWidget'><font color='#0000FF'>GtkWidget</font></a><font color='#000000'><b>*</b></font><a name='gtd_plugin_todo_txt_get_preferences_panel'><font color='#0000FF'>gtd_plugin_todo_txt_get_preferences_panel </font></a>(<a href='#GtdActivatable'><font color='#0000FF'>GtdActivatable </font></a><font color='#000000'><b>*</b></font><a name='activatable'><font color='#0000FF'>activatable</font></a>)
+45  {
+46      <a name='GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a name='plugin'><font color='#0000FF'>plugin </font></a><font color='#000000'><b>= </b></font><a name='GTD_PLUGIN_TODO_TXT'><font color='#0000FF'>GTD_PLUGIN_TODO_TXT </font></a>(<a name='activatable'><font color='#0000FF'>activatable</font></a>);
+47      <font color='#0000FF'><b>return </b></font><a href='#plugin'><font color='#0000FF'>plugin</font></a><font color='#000000'><b>-&gt;</b></font><a name='preferences_box'><font color='#0000FF'>preferences_box</font></a>;
+48      
+49  }
+50  <font color='#0000FF'><b>static </b></font><a href='#GList'><font color='#0000FF'>GList</font></a><font color='#000000'><b>*</b></font><a name='gtd_plugin_todo_txt_get_panels'><font color='#0000FF'>gtd_plugin_todo_txt_get_panels </font></a>(<a href='#GtdActivatable'><font color='#0000FF'>GtdActivatable </font></a><font color='#000000'><b>*</b></font><a name='activatable'><font color='#0000FF'>activatable</font></a>)
+51  {
+52      <font color='#0000FF'><b>return </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>;
+53      
+54  }
+55  <font color='#0000FF'><b>static </b></font><a href='#GList'><font color='#0000FF'>GList</font></a><font color='#000000'><b>*</b></font><a name='gtd_plugin_todo_txt_get_providers'><font color='#0000FF'>gtd_plugin_todo_txt_get_providers </font></a>(<a href='#GtdActivatable'><font color='#0000FF'>GtdActivatable </font></a><font color='#000000'><b>*</b></font><a name='activatable'><font color='#0000FF'>activatable</font></a>)
+56  {
+57      <a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a href='#plugin'><font color='#0000FF'>plugin </font></a><font color='#000000'><b>= </b></font><a href='#GTD_PLUGIN_TODO_TXT'><font color='#0000FF'>GTD_PLUGIN_TODO_TXT </font></a>(<a name='activatable'><font color='#0000FF'>activatable</font></a>);
+58      <font color='#0000FF'><b>return </b></font><a href='#plugin'><font color='#0000FF'>plugin</font></a><font color='#000000'><b>-&gt;</b></font><a name='providers'><font color='#0000FF'>providers</font></a>;
+59      
+60  }
+61  <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a href='#gtd_activatable_iface_init'><font color='#0000FF'>gtd_activatable_iface_init </font></a>(<a href='#GtdActivatableInterface'><font color='#0000FF'>GtdActivatableInterface </font></a><font color='#000000'><b>*</b></font><a name='iface'><font color='#0000FF'>iface</font></a>)
+62  {
+63      <a name='iface'><font color='#0000FF'>iface</font></a><font color='#000000'><b>-&gt;</b></font><a name='activate'><font color='#0000FF'>activate </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_activate'><font color='#0000FF'>gtd_plugin_todo_txt_activate</font></a>;
+64      <a name='iface'><font color='#0000FF'>iface</font></a><font color='#000000'><b>-&gt;</b></font><a name='deactivate'><font color='#0000FF'>deactivate </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_deactivate'><font color='#0000FF'>gtd_plugin_todo_txt_deactivate</font></a>;
+65      <a name='iface'><font color='#0000FF'>iface</font></a><font color='#000000'><b>-&gt;</b></font><a name='get_header_widgets'><font color='#0000FF'>get_header_widgets </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_get_header_widgets'><font color='#0000FF'>gtd_plugin_todo_txt_get_header_widgets</font></a>;
+66      <a name='iface'><font color='#0000FF'>iface</font></a><font color='#000000'><b>-&gt;</b></font><a name='get_preferences_panel'><font color='#0000FF'>get_preferences_panel </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_get_preferences_panel'><font color='#0000FF'>gtd_plugin_todo_txt_get_preferences_panel</font></a>;
+67      <a name='iface'><font color='#0000FF'>iface</font></a><font color='#000000'><b>-&gt;</b></font><a name='get_panels'><font color='#0000FF'>get_panels </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_get_panels'><font color='#0000FF'>gtd_plugin_todo_txt_get_panels</font></a>;
+68      <a name='iface'><font color='#0000FF'>iface</font></a><font color='#000000'><b>-&gt;</b></font><a name='get_providers'><font color='#0000FF'>get_providers </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_get_providers'><font color='#0000FF'>gtd_plugin_todo_txt_get_providers</font></a>;
+69      
+70  }
+71  <font color='#00FF00'>/*
+ * Init
+ */</font>
+72  <font color='#0000FF'><b>static </b></font><a name='gboolean'><font color='#0000FF'>gboolean </font></a><a name='gtd_plugin_todo_txt_set_default_source'><font color='#0000FF'>gtd_plugin_todo_txt_set_default_source </font></a>(<a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a name='self'><font color='#0000FF'>self</font></a>)
+73  {
+74      <a name='g_autofree'><font color='#0000FF'>g_autofree </font></a><a name='gchar'><font color='#0000FF'>gchar </font></a><font color='#000000'><b>*</b></font><a name='default_file'><font color='#0000FF'>default_file</font></a>;
+75      <a name='GError'><font color='#0000FF'>GError </font></a><font color='#000000'><b>*</b></font><a name='error'><font color='#0000FF'>error</font></a>;
+76      <a name='error'><font color='#0000FF'>error </font></a><font color='#000000'><b>= </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>;
+77      <a name='default_file'><font color='#0000FF'>default_file </font></a><font color='#000000'><b>= </b></font><a name='g_build_filename'><font color='#0000FF'>g_build_filename </font></a>(<a name='g_get_user_special_dir'><font color='#0000FF'>g_get_user_special_dir </font></a>(<a name='G_USER_DIRECTORY_DOCUMENTS'><font color='#0000FF'>G_USER_DIRECTORY_DOCUMENTS</font></a>)<font color='#000000'><b>, </b></font><a name='todo'><font color='#0000FF'>todo</font></a><a name='txt'><font color='#0000FF'>txt</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>);
+78      <a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='source_file'><font color='#0000FF'>source_file </font></a><font color='#000000'><b>= </b></font><a name='g_file_new_for_path'><font color='#0000FF'>g_file_new_for_path </font></a>(<a href='#default_file'><font color='#0000FF'>default_file</font></a>);
+79      <font color='#0000FF'><b>if </b></font>(<a name='g_file_query_exists'><font color='#0000FF'>g_file_query_exists </font></a>(<a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#source_file'><font color='#0000FF'>source_file</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>))<font color='#0000FF'><b>return </b></font><a name='TRUE'><font color='#0000FF'>TRUE</font></a>;
+80      <a name='g_file_create'><font color='#0000FF'>g_file_create </font></a>(<a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#source_file'><font color='#0000FF'>source_file</font></a><font color='#000000'><b>, </b></font><a name='G_FILE_CREATE_NONE'><font color='#0000FF'>G_FILE_CREATE_NONE</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a><font color='#000000'><b>, </b></font><font color='#000000'><b>&amp;</b></font><a href='#error'><font color='#0000FF'>error</font></a>);
+81      <font color='#0000FF'><b>if </b></font>(<a href='#error'><font color='#0000FF'>error</font></a>)
+82      {
+83          <a name='gtd_manager_emit_error_message'><font color='#0000FF'>gtd_manager_emit_error_message </font></a>(<a name='gtd_manager_get_default'><font color='#0000FF'>gtd_manager_get_default </font></a>()<font color='#000000'><b>, </b></font><a name='_'><font color='#0000FF'>_</font></a>(<a name='Cannot'><font color='#0000FF'>Cannot </font></a><a name='create'><font color='#0000FF'>create </font></a><a name='Todo'><font color='#0000FF'>Todo</font></a><a name='txt'><font color='#0000FF'>txt </font></a><a name='file'><font color='#0000FF'>file</font></a>)<font color='#000000'><b>, </b></font><a href='#error'><font color='#0000FF'>error</font></a><font color='#000000'><b>-&gt;</b></font><a name='message'><font color='#0000FF'>message</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>);
+84          <a name='g_clear_error'><font color='#0000FF'>g_clear_error </font></a>(<font color='#000000'><b>&amp;</b></font><a href='#error'><font color='#0000FF'>error</font></a>);
+85          <font color='#0000FF'><b>return </b></font><a name='FALSE'><font color='#0000FF'>FALSE</font></a>;
+86          
+87      }
+88      <font color='#0000FF'><b>return </b></font><a name='TRUE'><font color='#0000FF'>TRUE</font></a>;
+89      
+90  }
+91  <font color='#0000FF'><b>static </b></font><a href='#gboolean'><font color='#0000FF'>gboolean </font></a><a name='gtd_plugin_todo_txt_set_source'><font color='#0000FF'>gtd_plugin_todo_txt_set_source </font></a>(<a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a name='self'><font color='#0000FF'>self</font></a>)
+92  {
+93      <a href='#GError'><font color='#0000FF'>GError </font></a><font color='#000000'><b>*</b></font><a href='#error'><font color='#0000FF'>error</font></a>;
+94      <a href='#gchar'><font color='#0000FF'>gchar </font></a><font color='#000000'><b>*</b></font><a name='source'><font color='#0000FF'>source</font></a>;
+95      <a href='#error'><font color='#0000FF'>error </font></a><font color='#000000'><b>= </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>;
+96      <a name='source'><font color='#0000FF'>source </font></a><font color='#000000'><b>= </b></font><a name='g_settings_get_string'><font color='#0000FF'>g_settings_get_string </font></a>(<a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='settings'><font color='#0000FF'>settings</font></a><font color='#000000'><b>, </b></font><a name='file'><font color='#0000FF'>file</font></a>);
+97      <font color='#0000FF'><b>if </b></font>(<font color='#000000'><b>!</b></font><a href='#source'><font color='#0000FF'>source </font></a><font color='#000000'><b>||</b></font><a href='#source'><font color='#0000FF'>source</font></a>[ <font color='#00ffff'><i>0</i></font>] <font color='#000000'><b>==</b></font><font color='#00ffff'><u>'\0'</u></font>)
+98      {
+99          <font color='#0000FF'><b>if </b></font>(<font color='#000000'><b>!</b></font><a href='#gtd_plugin_todo_txt_set_default_source'><font color='#0000FF'>gtd_plugin_todo_txt_set_default_source </font></a>(<a name='self'><font color='#0000FF'>self</font></a>))<font color='#0000FF'><b>return </b></font><a name='FALSE'><font color='#0000FF'>FALSE</font></a>;
+100         
+101     }
+102     <font color='#0000FF'><b>else </b></font>
+103     {
+104         <a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#source_file'><font color='#0000FF'>source_file </font></a><font color='#000000'><b>= </b></font><a name='g_file_new_for_uri'><font color='#0000FF'>g_file_new_for_uri </font></a>(<a href='#source'><font color='#0000FF'>source</font></a>);
+105         
+106     }
+107     <font color='#0000FF'><b>if </b></font>(<font color='#000000'><b>!</b></font><a href='#g_file_query_exists'><font color='#0000FF'>g_file_query_exists </font></a>(<a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#source_file'><font color='#0000FF'>source_file</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>))
+108     {
+109         <a href='#g_file_create'><font color='#0000FF'>g_file_create </font></a>(<a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#source_file'><font color='#0000FF'>source_file</font></a><font color='#000000'><b>, </b></font><a name='G_FILE_CREATE_NONE'><font color='#0000FF'>G_FILE_CREATE_NONE</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a><font color='#000000'><b>, </b></font><font color='#000000'><b>&amp;</b></font><a href='#error'><font color='#0000FF'>error</font></a>);
+110         <font color='#0000FF'><b>if </b></font>(<a href='#error'><font color='#0000FF'>error</font></a>)
+111         {
+112             <a href='#gtd_manager_emit_error_message'><font color='#0000FF'>gtd_manager_emit_error_message </font></a>(<a href='#gtd_manager_get_default'><font color='#0000FF'>gtd_manager_get_default </font></a>()<font color='#000000'><b>, </b></font><a name='_'><font color='#0000FF'>_</font></a>(<a href='#Cannot'><font color='#0000FF'>Cannot </font></a><a href='#create'><font color='#0000FF'>create </font></a><a name='Todo'><font color='#0000FF'>Todo</font></a><a href='#txt'><font color='#0000FF'>txt </font></a><a name='file'><font color='#0000FF'>file</font></a>)<font color='#000000'><b>, </b></font><a href='#error'><font color='#0000FF'>error</font></a><font color='#000000'><b>-&gt;</b></font><a name='message'><font color='#0000FF'>message</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>);
+113             <a href='#g_clear_error'><font color='#0000FF'>g_clear_error </font></a>(<font color='#000000'><b>&amp;</b></font><a href='#error'><font color='#0000FF'>error</font></a>);
+114             <font color='#0000FF'><b>return </b></font><a name='FALSE'><font color='#0000FF'>FALSE</font></a>;
+115             
+116         }
+117         
+118     }
+119     <font color='#0000FF'><b>return </b></font><a name='TRUE'><font color='#0000FF'>TRUE</font></a>;
+120     
+121 }
+122 <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_source_changed_finished_cb'><font color='#0000FF'>gtd_plugin_todo_txt_source_changed_finished_cb </font></a>(<a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a name='self'><font color='#0000FF'>self</font></a>)
+123 {
+124     <a name='GtdProviderTodoTxt'><font color='#0000FF'>GtdProviderTodoTxt </font></a><font color='#000000'><b>*</b></font><a name='provider'><font color='#0000FF'>provider</font></a>;
+125     <a href='#gboolean'><font color='#0000FF'>gboolean </font></a><a name='set'><font color='#0000FF'>set</font></a>;
+126     <a name='set'><font color='#0000FF'>set </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_set_source'><font color='#0000FF'>gtd_plugin_todo_txt_set_source </font></a>(<a name='self'><font color='#0000FF'>self</font></a>);
+127     <font color='#0000FF'><b>if </b></font>(<font color='#000000'><b>!</b></font><a href='#set'><font color='#0000FF'>set</font></a>)<font color='#0000FF'><b>return</b></font>;
+128     <a name='provider'><font color='#0000FF'>provider </font></a><font color='#000000'><b>= </b></font><a name='gtd_provider_todo_txt_new'><font color='#0000FF'>gtd_provider_todo_txt_new </font></a>(<a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#source_file'><font color='#0000FF'>source_file</font></a>);
+129     <a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='providers'><font color='#0000FF'>providers </font></a><font color='#000000'><b>= </b></font><a name='g_list_append'><font color='#0000FF'>g_list_append </font></a>(<a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers</font></a><font color='#000000'><b>, </b></font><a href='#provider'><font color='#0000FF'>provider</font></a>);
+130     <a name='g_signal_emit_by_name'><font color='#0000FF'>g_signal_emit_by_name </font></a>(<a name='self'><font color='#0000FF'>self</font></a><font color='#000000'><b>, </b></font><a href='#provider'><font color='#0000FF'>provider</font></a><font color='#000000'><b>-</b></font><a name='added'><font color='#0000FF'>added</font></a><font color='#000000'><b>, </b></font><a href='#provider'><font color='#0000FF'>provider</font></a>);
+131     
+132 }
+133 <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_source_changed_cb'><font color='#0000FF'>gtd_plugin_todo_txt_source_changed_cb </font></a>(<a href='#GtkWidget'><font color='#0000FF'>GtkWidget </font></a><font color='#000000'><b>*</b></font><a name='preference_panel'><font color='#0000FF'>preference_panel</font></a><font color='#000000'><b>, </b></font><a name='gpointer'><font color='#0000FF'>gpointer </font></a><a name='user_data'><font color='#0000FF'>user_data</font></a>)
+134 {
+135     <a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a name='self'><font color='#0000FF'>self</font></a>;
+136     <a href='#GtdProviderTodoTxt'><font color='#0000FF'>GtdProviderTodoTxt </font></a><font color='#000000'><b>*</b></font><a href='#provider'><font color='#0000FF'>provider</font></a>;
+137     <a name='self'><font color='#0000FF'>self </font></a><font color='#000000'><b>= </b></font><a href='#GTD_PLUGIN_TODO_TXT'><font color='#0000FF'>GTD_PLUGIN_TODO_TXT </font></a>(<a name='user_data'><font color='#0000FF'>user_data</font></a>);
+138     <a name='g_clear_object'><font color='#0000FF'>g_clear_object </font></a>(<font color='#000000'><b>&amp;</b></font><a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#source_file'><font color='#0000FF'>source_file</font></a>);
+139     <a name='g_settings_set_string'><font color='#0000FF'>g_settings_set_string </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='settings'><font color='#0000FF'>settings</font></a><font color='#000000'><b>, </b></font><a name='file'><font color='#0000FF'>file</font></a><font color='#000000'><b>, </b></font><a name='gtk_file_chooser_get_uri'><font color='#0000FF'>gtk_file_chooser_get_uri </font></a>(<a name='GTK_FILE_CHOOSER'><font color='#0000FF'>GTK_FILE_CHOOSER </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='preferences'><font color='#0000FF'>preferences</font></a>)));
+140     <font color='#0000FF'><b>if </b></font>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers</font></a>)
+141     {
+142         <a href='#provider'><font color='#0000FF'>provider </font></a><font color='#000000'><b>= </b></font><a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers</font></a><font color='#000000'><b>-&gt;</b></font><a name='data'><font color='#0000FF'>data</font></a>;
+143         <a name='g_list_free_full'><font color='#0000FF'>g_list_free_full </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers</font></a><font color='#000000'><b>, </b></font><a name='g_object_unref'><font color='#0000FF'>g_object_unref</font></a>);
+144         <a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers </font></a><font color='#000000'><b>= </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>;
+145         <a href='#g_signal_emit_by_name'><font color='#0000FF'>g_signal_emit_by_name </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>, </b></font><a href='#provider'><font color='#0000FF'>provider</font></a><font color='#000000'><b>-</b></font><a name='removed'><font color='#0000FF'>removed</font></a><font color='#000000'><b>, </b></font><a href='#provider'><font color='#0000FF'>provider</font></a>);
+146         
+147     }
+148     <a href='#gtd_plugin_todo_txt_source_changed_finished_cb'><font color='#0000FF'>gtd_plugin_todo_txt_source_changed_finished_cb </font></a>(<a href='#self'><font color='#0000FF'>self</font></a>);
+149     
+150 }
+151 <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_finalize'><font color='#0000FF'>gtd_plugin_todo_txt_finalize </font></a>(<a name='GObject'><font color='#0000FF'>GObject </font></a><font color='#000000'><b>*</b></font><a name='object'><font color='#0000FF'>object</font></a>)
+152 {
+153     <a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a href='#self'><font color='#0000FF'>self </font></a><font color='#000000'><b>= </b></font>(<a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font>)<a name='object'><font color='#0000FF'>object</font></a>;
+154     <a href='#g_list_free_full'><font color='#0000FF'>g_list_free_full </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers</font></a><font color='#000000'><b>, </b></font><a name='g_object_unref'><font color='#0000FF'>g_object_unref</font></a>);
+155     <a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers </font></a><font color='#000000'><b>= </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>;
+156     <a name='G_OBJECT_CLASS'><font color='#0000FF'>G_OBJECT_CLASS </font></a>(<a name='gtd_plugin_todo_txt_parent_class'><font color='#0000FF'>gtd_plugin_todo_txt_parent_class</font></a>)<font color='#000000'><b>-&gt;</b></font><a name='finalize'><font color='#0000FF'>finalize </font></a>(<a name='object'><font color='#0000FF'>object</font></a>);
+157     
+158 }
+159 <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_get_property'><font color='#0000FF'>gtd_plugin_todo_txt_get_property </font></a>(<a href='#GObject'><font color='#0000FF'>GObject </font></a><font color='#000000'><b>*</b></font><a name='object'><font color='#0000FF'>object</font></a><font color='#000000'><b>, </b></font><a name='guint'><font color='#0000FF'>guint </font></a><a name='prop_id'><font color='#0000FF'>prop_id</font></a><font color='#000000'><b>, </b></font><a name='GValue'><font color='#0000FF'>GValue </font></a><font color='#000000'><b>*</b></font><a name='value'><font color='#0000FF'>value</font></a><font color='#000000'><b>, </b></font><a name='GParamSpec'><font color='#0000FF'>GParamSpec </font></a><font color='#000000'><b>*</b></font><a name='pspec'><font color='#0000FF'>pspec</font></a>)
+160 {
+161     <a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a href='#self'><font color='#0000FF'>self </font></a><font color='#000000'><b>= </b></font><a href='#GTD_PLUGIN_TODO_TXT'><font color='#0000FF'>GTD_PLUGIN_TODO_TXT </font></a>(<a name='object'><font color='#0000FF'>object</font></a>);
+162     <font color='#0000FF'><b>switch </b></font>(<a name='prop_id'><font color='#0000FF'>prop_id</font></a>)
+163     {
+164         <font color='#0000FF'><b>case </b></font><a name='PROP_PREFERENCES_PANEL'><font color='#0000FF'>PROP_PREFERENCES_PANEL</font></a><font color='#000000'><b>:</b></font><a name='g_value_set_object'><font color='#0000FF'>g_value_set_object </font></a>(<a name='value'><font color='#0000FF'>value</font></a><font color='#000000'><b>, </b></font><a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='preferences'><font color='#0000FF'>preferences</font></a>);
+165         <font color='#0000FF'><b>break</b></font>;
+166         <font color='#0000FF'><b>default</b></font><font color='#000000'><b>:</b></font><a name='G_OBJECT_WARN_INVALID_PROPERTY_ID'><font color='#0000FF'>G_OBJECT_WARN_INVALID_PROPERTY_ID </font></a>(<a name='object'><font color='#0000FF'>object</font></a><font color='#000000'><b>, </b></font><a name='prop_id'><font color='#0000FF'>prop_id</font></a><font color='#000000'><b>, </b></font><a name='pspec'><font color='#0000FF'>pspec</font></a>);
+167         
+168     }
+169     
+170 }
+171 <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_class_init'><font color='#0000FF'>gtd_plugin_todo_txt_class_init </font></a>(<a name='GtdPluginTodoTxtClass'><font color='#0000FF'>GtdPluginTodoTxtClass </font></a><font color='#000000'><b>*</b></font><a name='klass'><font color='#0000FF'>klass</font></a>)
+172 {
+173     <a name='GObjectClass'><font color='#0000FF'>GObjectClass </font></a><font color='#000000'><b>*</b></font><a name='object_class'><font color='#0000FF'>object_class </font></a><font color='#000000'><b>= </b></font><a href='#G_OBJECT_CLASS'><font color='#0000FF'>G_OBJECT_CLASS </font></a>(<a name='klass'><font color='#0000FF'>klass</font></a>);
+174     <a href='#object_class'><font color='#0000FF'>object_class</font></a><font color='#000000'><b>-&gt;</b></font><a href='#finalize'><font color='#0000FF'>finalize </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_finalize'><font color='#0000FF'>gtd_plugin_todo_txt_finalize</font></a>;
+175     <a href='#object_class'><font color='#0000FF'>object_class</font></a><font color='#000000'><b>-&gt;</b></font><a name='get_property'><font color='#0000FF'>get_property </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_get_property'><font color='#0000FF'>gtd_plugin_todo_txt_get_property</font></a>;
+176     <a name='g_object_class_override_property'><font color='#0000FF'>g_object_class_override_property </font></a>(<a href='#object_class'><font color='#0000FF'>object_class</font></a><font color='#000000'><b>, </b></font><a name='PROP_PREFERENCES_PANEL'><font color='#0000FF'>PROP_PREFERENCES_PANEL</font></a><font color='#000000'><b>, </b></font><a name='preferences'><font color='#0000FF'>preferences</font></a><font color='#000000'><b>-</b></font><a name='panel'><font color='#0000FF'>panel</font></a>);
+177     
+178 }
+179 <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_init'><font color='#0000FF'>gtd_plugin_todo_txt_init </font></a>(<a href='#GtdPluginTodoTxt'><font color='#0000FF'>GtdPluginTodoTxt </font></a><font color='#000000'><b>*</b></font><a href='#self'><font color='#0000FF'>self</font></a>)
+180 {
+181     <a href='#GtdProviderTodoTxt'><font color='#0000FF'>GtdProviderTodoTxt </font></a><font color='#000000'><b>*</b></font><a href='#provider'><font color='#0000FF'>provider</font></a>;
+182     <a href='#GtkWidget'><font color='#0000FF'>GtkWidget </font></a><font color='#000000'><b>*</b></font><a name='label'><font color='#0000FF'>label</font></a>;
+183     <a href='#gboolean'><font color='#0000FF'>gboolean </font></a><a href='#set'><font color='#0000FF'>set</font></a>;
+184     <a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='settings'><font color='#0000FF'>settings </font></a><font color='#000000'><b>= </b></font><a name='g_settings_new'><font color='#0000FF'>g_settings_new </font></a>(<a name='org'><font color='#0000FF'>org</font></a><a name='gnome'><font color='#0000FF'>gnome</font></a><a name='todo'><font color='#0000FF'>todo</font></a><a name='plugins'><font color='#0000FF'>plugins</font></a><a name='todo'><font color='#0000FF'>todo</font></a><font color='#000000'><b>-</b></font><a href='#txt'><font color='#0000FF'>txt</font></a>);
+185     <a href='#set'><font color='#0000FF'>set </font></a><font color='#000000'><b>= </b></font><a href='#gtd_plugin_todo_txt_set_source'><font color='#0000FF'>gtd_plugin_todo_txt_set_source </font></a>(<a href='#self'><font color='#0000FF'>self</font></a>);
+186     <a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers </font></a><font color='#000000'><b>= </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>;
+187     <font color='#0000FF'><b>if </b></font>(<a href='#set'><font color='#0000FF'>set</font></a>)
+188     {
+189         <a href='#provider'><font color='#0000FF'>provider </font></a><font color='#000000'><b>= </b></font><a href='#gtd_provider_todo_txt_new'><font color='#0000FF'>gtd_provider_todo_txt_new </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#source_file'><font color='#0000FF'>source_file</font></a>);
+190         <a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers </font></a><font color='#000000'><b>= </b></font><a href='#g_list_append'><font color='#0000FF'>g_list_append </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#providers'><font color='#0000FF'>providers</font></a><font color='#000000'><b>, </b></font><a href='#provider'><font color='#0000FF'>provider</font></a>);
+191         
+192     }
+193     <font color='#00FF00'>/* Preferences */</font>
+194     <a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='preferences_box'><font color='#0000FF'>preferences_box </font></a><font color='#000000'><b>= </b></font><a name='g_object_new'><font color='#0000FF'>g_object_new </font></a>(<a name='GTK_TYPE_BOX'><font color='#0000FF'>GTK_TYPE_BOX</font></a><font color='#000000'><b>, </b></font><a name='margin'><font color='#0000FF'>margin</font></a><font color='#000000'><b>, </b></font><font color='#00ffff'><i>18</i></font><font color='#000000'><b>, </b></font><a name='spacing'><font color='#0000FF'>spacing</font></a><font color='#000000'><b>, </b></font><font color='#00ffff'><i>12</i></font><font color='#000000'><b>, </b></font><a name='expand'><font color='#0000FF'>expand</font></a><font color='#000000'><b>, </b></font><a name='TRUE'><font color='#0000FF'>TRUE</font></a><font color='#000000'><b>, </b></font><a name='orientation'><font color='#0000FF'>orientation</font></a><font color='#000000'><b>, </b></font><a name='GTK_ORIENTATION_VERTICAL'><font color='#0000FF'>GTK_ORIENTATION_VERTICAL</font></a><font color='#000000'><b>, </b></font><a name='NULL'><font color='#0000FF'>NULL</font></a>);
+195     <a name='label'><font color='#0000FF'>label </font></a><font color='#000000'><b>= </b></font><a name='gtk_label_new'><font color='#0000FF'>gtk_label_new </font></a>(<a name='_'><font color='#0000FF'>_</font></a>(<a name='Select'><font color='#0000FF'>Select </font></a><a name='a'><font color='#0000FF'>a </font></a><a name='Todo'><font color='#0000FF'>Todo</font></a><a href='#txt'><font color='#0000FF'>txt</font></a><font color='#000000'><b>-</b></font><a name='formatted'><font color='#0000FF'>formatted </font></a><a name='file'><font color='#0000FF'>file</font></a><font color='#000000'><b>:</b></font>));
+196     <a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a name='preferences'><font color='#0000FF'>preferences </font></a><font color='#000000'><b>= </b></font><a name='gtk_file_chooser_button_new'><font color='#0000FF'>gtk_file_chooser_button_new </font></a>(<a name='_'><font color='#0000FF'>_</font></a>(<a href='#Select'><font color='#0000FF'>Select </font></a><a href='#a'><font color='#0000FF'>a </font></a><a name='file'><font color='#0000FF'>file</font></a>)<font color='#000000'><b>, </b></font><a name='GTK_FILE_CHOOSER_ACTION_OPEN'><font color='#0000FF'>GTK_FILE_CHOOSER_ACTION_OPEN</font></a>);
+197     <a name='gtk_widget_set_size_request'><font color='#0000FF'>gtk_widget_set_size_request </font></a>(<a name='GTK_WIDGET'><font color='#0000FF'>GTK_WIDGET </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#preferences_box'><font color='#0000FF'>preferences_box</font></a>)<font color='#000000'><b>, </b></font><font color='#00ffff'><i>300</i></font><font color='#000000'><b>, </b></font><font color='#00ffff'><i>0</i></font>);
+198     <a name='gtk_container_add'><font color='#0000FF'>gtk_container_add </font></a>(<a name='GTK_CONTAINER'><font color='#0000FF'>GTK_CONTAINER </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#preferences_box'><font color='#0000FF'>preferences_box</font></a>)<font color='#000000'><b>, </b></font><a href='#label'><font color='#0000FF'>label</font></a>);
+199     <a href='#gtk_container_add'><font color='#0000FF'>gtk_container_add </font></a>(<a href='#GTK_CONTAINER'><font color='#0000FF'>GTK_CONTAINER </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#preferences_box'><font color='#0000FF'>preferences_box</font></a>)<font color='#000000'><b>, </b></font><a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#preferences'><font color='#0000FF'>preferences</font></a>);
+200     <a name='gtk_widget_set_halign'><font color='#0000FF'>gtk_widget_set_halign </font></a>(<a href='#GTK_WIDGET'><font color='#0000FF'>GTK_WIDGET </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#preferences_box'><font color='#0000FF'>preferences_box</font></a>)<font color='#000000'><b>, </b></font><a name='GTK_ALIGN_CENTER'><font color='#0000FF'>GTK_ALIGN_CENTER</font></a>);
+201     <a name='gtk_widget_set_valign'><font color='#0000FF'>gtk_widget_set_valign </font></a>(<a href='#GTK_WIDGET'><font color='#0000FF'>GTK_WIDGET </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#preferences_box'><font color='#0000FF'>preferences_box</font></a>)<font color='#000000'><b>, </b></font><a name='GTK_ALIGN_CENTER'><font color='#0000FF'>GTK_ALIGN_CENTER</font></a>);
+202     <a name='gtk_widget_show_all'><font color='#0000FF'>gtk_widget_show_all </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#preferences_box'><font color='#0000FF'>preferences_box</font></a>);
+203     <a name='g_signal_connect'><font color='#0000FF'>g_signal_connect </font></a>(<a href='#self'><font color='#0000FF'>self</font></a><font color='#000000'><b>-&gt;</b></font><a href='#preferences'><font color='#0000FF'>preferences</font></a><font color='#000000'><b>, </b></font><a name='file'><font color='#0000FF'>file</font></a><font color='#000000'><b>-</b></font><a href='#set'><font color='#0000FF'>set</font></a><font color='#000000'><b>, </b></font><a name='G_CALLBACK'><font color='#0000FF'>G_CALLBACK </font></a>(<a href='#gtd_plugin_todo_txt_source_changed_cb'><font color='#0000FF'>gtd_plugin_todo_txt_source_changed_cb</font></a>)<font color='#000000'><b>, </b></font><a href='#self'><font color='#0000FF'>self</font></a>);
+204     
+205 }
+206 <font color='#00FF00'>/* Empty class_finalize method */</font>
+207 <font color='#0000FF'><b>static </b></font><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_class_finalize'><font color='#0000FF'>gtd_plugin_todo_txt_class_finalize </font></a>(<a href='#GtdPluginTodoTxtClass'><font color='#0000FF'>GtdPluginTodoTxtClass </font></a><font color='#000000'><b>*</b></font><a name='klass'><font color='#0000FF'>klass</font></a>)
+208 {
+209     
+210 }
+211 <a name='G_MODULE_EXPORT'><font color='#0000FF'>G_MODULE_EXPORT </font></a><font color='#0000FF'><b>void </b></font><a name='gtd_plugin_todo_txt_register_types'><font color='#0000FF'>gtd_plugin_todo_txt_register_types </font></a>(<a name='PeasObjectModule'><font color='#0000FF'>PeasObjectModule </font></a><font color='#000000'><b>*</b></font><a name='module'><font color='#0000FF'>module</font></a>)
+212 {
+213     <a name='gtd_plugin_todo_txt_register_type'><font color='#0000FF'>gtd_plugin_todo_txt_register_type </font></a>(<a name='G_TYPE_MODULE'><font color='#0000FF'>G_TYPE_MODULE </font></a>(<a name='module'><font color='#0000FF'>module</font></a>));
+214     <a name='peas_object_module_register_extension_type'><font color='#0000FF'>peas_object_module_register_extension_type </font></a>(<a name='module'><font color='#0000FF'>module</font></a><font color='#000000'><b>, </b></font><a name='GTD_TYPE_ACTIVATABLE'><font color='#0000FF'>GTD_TYPE_ACTIVATABLE</font></a><font color='#000000'><b>, </b></font><a name='GTD_TYPE_PLUGIN_TODO_TXT'><font color='#0000FF'>GTD_TYPE_PLUGIN_TODO_TXT</font></a>);
+215     
+216 }
+217 
+</pre></html>

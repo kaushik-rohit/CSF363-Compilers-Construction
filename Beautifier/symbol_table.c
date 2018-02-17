@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "symbol_table.h"
 #include <string.h>
-#define MAX_SYMBOLS 200
+#define MAX_SYMBOLS 200000
 
 typedef struct _entry entry;
 
@@ -35,6 +35,7 @@ int insert(char *ch, int token)
   
   key = (entry*) malloc(sizeof(entry));
   key->lexptr = ch;
+  key->token = token;
   symbol_table[n_tokens] = key;
   n_tokens++;
   

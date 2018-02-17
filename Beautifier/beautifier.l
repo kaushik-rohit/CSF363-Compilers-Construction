@@ -65,7 +65,7 @@ ch     [^{back}{quote}{ditto}\n]
 0(x|X){hex}+                                                                       write_hex();
 {digit}+                                                                           write_int();
 {digit}+\.{digit}*{exp}{0,1}                                                       write_fp();
-{alpha}[{alpha}{digit}]*                                                           write_id();
+{alpha}({alpha}|{digit})*(" "|"\n")?                                               write_id();
 "{"                                                                                write_begin();
 "}"                                                                                write_end();
 "("                                                                                write_open();
@@ -73,7 +73,7 @@ ch     [^{back}{quote}{ditto}\n]
 "["                                                                                write_bopen();
 "]"                                                                                write_bclose();
 ";"                                                                                write_sep();
-"+"|"-"|"*"|"/"|"++"|"--"|"+="|"-="|"*="|"/="|"%"|"!"|"~"|"sizeof"|"&&"|"||"       write_op();
+"="|"+"|"-"|"*"|"/"|"++"|"--"|"+="|"-="|"*="|"/="|"%="|"&="|"|="|"^="|"?"|":"|","|"%"|"!"|"~"|"sizeof"|"&&"|"&"|"||"|">>"|"<<"|"<"|">"|"=="|">="|"<="|"!="|"->"     write_op();
 "//"[^\n]*                                                                         write_inline();
 "/*"                                                                               write_comment();
 #[^\n]*                                                                            write_directive();
@@ -105,14 +105,14 @@ void write_html()
 
 void write_string()
 {
-  printf("<font color=’#FF0000’>");
+  printf("<font color='#FF0000'>");
   write_html();
   printf("</font>");
 }
 
 void write_char()
 {
-  printf("<font color=’#00ffff’>");
+  printf("<font color='#00ffff'>");
   printf("<u>");
   write_html();
   printf("</u>");
@@ -121,7 +121,7 @@ void write_char()
 
 void write_oct()
 {
-  printf("<font color=’#00ffff’>");
+  printf("<font color='#00ffff'>");
   printf("<i>");
   write_html();
   printf("</i>");
@@ -130,7 +130,7 @@ void write_oct()
 
 void write_hex()
 {
-  printf("<font color=’#00ffff’>");
+  printf("<font color='#00ffff'>");
   printf("<i>");
   write_html();
   printf("</i>");
@@ -139,7 +139,7 @@ void write_hex()
 
 void write_int()
 {
-  printf("<font color=’#00ffff’>");
+  printf("<font color='#00ffff'>");
   printf("<i>");
   write_html();
   printf("</i>");
@@ -148,17 +148,67 @@ void write_int()
 
 void write_fp()
 {
-  printf("<font color=’#00ffff’>");
+  printf("<font color='#00ffff'>");
   write_html();
   printf("</font>");
 }
 
 void write_id()
 {
-  printf("<font color=’#0000FF’>");
-  write_html();
-  printf("</font>");
+  char *s = yytext;
+  //printf("%s\n", s);
+  int ends_with_space = 0;
+  
+  if(s[strlen(s) - 1] == ' ' || s[strlen(s) - 1] == '\n')
+  {
+    s[strlen(s)-1] = 0;
+    ends_with_space = 1;
+  }
+    
+    
+  int id = lookup(s);
+  //printf("\n%s %d\n", s,id);
+  if(id == -1)
+  {
+    /* the id is not already present in the symbol table
+     * here we need to create an anchor tag
+     */
+ 	  insert(s,1);
+	  printf("<a name='%s'>",s);
+	  printf("<font color='#0000FF'>");
+	  write_html();
+	  if(ends_with_space)
+	    putchar(' ');
+	  printf("</font></a>");
+  }
+  else
+  {
+    /* first 32 elements in symbol table are keywords rest
+     * are identifiers. The keywords need to be Blue and
+     * boldface.
+     */
+     
+    if(id < 32)
+    {
+      // Here goes the code for keywords
+        printf("<font color='#0000FF'><b>");
+        write_html();
+    	  if(ends_with_space)
+	        putchar(' ');
+        printf("</b></font>");
+    }
+   else
+   {
+     // Here goes the code for already encoutered identifier
+  	 printf("<a href='#%s'>",s);
+     printf("<font color='#0000FF'>");
+     write_html();
+ 	   if(ends_with_space)
+	     putchar(' ');
+     printf("</font></a>");
+   }
 
+  }
 }
 
 // begin {}-block
@@ -183,7 +233,6 @@ void write_end()
 void write_open()
 { 
   write_html();
-  putchar(' ');
   paren++;
 }
 
@@ -191,18 +240,19 @@ void write_open()
 void write_close()
 { 
   write_html();
-  putchar(' ');
   paren--;
 }
 
 void write_bopen()
 {
   write_html();
+  putchar(' ');
 }
 
 void write_bclose()
 {
   write_html();
+  putchar(' ');
 }
 
 // output ’;’, i.e. statement terminator or for()-expression separator
@@ -217,14 +267,39 @@ void write_sep()
 
 void write_op()
 {
+  char *s = yytext;
   printf("<font color='#000000'><b>");
   write_html();
+  if(strcmp(s, ",") == 0)
+  {
+    /* use case in case of enum where ',' mean next line
+     * enum{
+     *   PROP_0,
+     *   PROP_PREFERENCES_PANEL,
+     *   LAST_PROP 
+     * }
+     */
+    if(!paren)
+    {
+      indent();
+    }
+      
+    else
+      putchar(' ');
+  }
+  else if(strcmp(s, "=") == 0)
+    putchar(' ');
+    
+  
   printf("</b></font>");
 }
 
 void write_inline()
 {
-
+	printf("<font color='#00FF00'>");
+	write_html();
+	printf("</font>");
+  indent();
 }
 
 void write_comment()
@@ -252,7 +327,6 @@ void write_directive()
   write_html();
   printf("</b></font>");
   indent();
-  
 }
 
 void error()
