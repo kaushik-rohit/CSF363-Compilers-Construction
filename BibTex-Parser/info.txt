@@ -1,0 +1,4 @@
+This is a assignment for Compilers Course at BITS Pilani.
+The project aims at building a Bibtex parser and storing
+the entries in a SQL database.
+
