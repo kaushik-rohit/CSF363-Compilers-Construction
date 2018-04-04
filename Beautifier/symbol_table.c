@@ -55,5 +55,4 @@ void init()
     symbol_table[n_tokens] = data;
     n_tokens++;
   }
-
 }
